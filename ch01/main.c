@@ -57,7 +57,22 @@ List Insert(ElementType a[], int N,List L)
 	}
 	return L;
 }
-void PrintLots(List L, List P)
+List Insert_null(ElementType x,List L)//给一个空链表里面逐个添加元素
+{
+	Position TmpCell;
+	TmpCell = malloc(sizeof(struct Node));
+	if (TmpCell == NULL)
+		printf("Out of space!!!");
+	
+	TmpCell->Element = x;
+	if (L->Next == NULL)
+		TmpCell->Next = NULL;
+	else
+		TmpCell->Next = L->Next;
+	L->Next = TmpCell;
+	return L;
+}
+void PrintLots(List L,List P)
 {
 	Position PosL, PosP;
 	ElementType x;
@@ -84,6 +99,95 @@ void PrintLots(List L, List P)
 		printf("\nList L is end\n");
 	}
 }
+List intersection(List T, List P,List U)
+{
+	Position TmpT, TmpP;
+	TmpT = T->Next;
+	TmpP = P->Next;
+	U = malloc(sizeof(struct Node));
+	U->Next = NULL;
+	if (U == NULL)
+		printf("Out of space!!!");
+	while (TmpT != NULL && TmpP != NULL)
+	{
+		if (TmpT->Element > TmpP->Element)
+		{
+			TmpP = TmpP->Next;
+		}
+		else if (TmpT->Element < TmpP->Element)
+		{
+			TmpT = TmpT->Next;
+		}
+		else
+		{
+			U = Insert_null(TmpT->Element, U);
+			TmpT = TmpT->Next;
+			TmpP = TmpP->Next;
+		}
+	}
+	return U;
+}
+List unionset(List T, List P, List U)
+{
+	Position TmpT, TmpP;
+	TmpT = T->Next;
+	TmpP = P->Next;
+	U = malloc(sizeof(struct Node));
+	U->Next = NULL;//很重要，不然会出现访问异常
+	if (U == NULL)
+		printf("Out of space!!!");
+	while (TmpT != NULL && TmpP != NULL)
+	{
+		if (TmpT->Element > TmpP->Element)
+		{
+			U=Insert_null(TmpP->Element, U);
+			TmpP = TmpP->Next;
+		}
+		else if (TmpT->Element < TmpP->Element)
+		{
+			U=Insert_null(TmpT->Element, U);
+			TmpT = TmpT->Next;
+		}
+		else
+		{
+			U = Insert_null(TmpT->Element, U);
+			TmpT = TmpT->Next;
+			TmpP = TmpP->Next;
+		}
+	}
+	if (TmpT == NULL)
+	{
+		while (TmpP != NULL)
+		{
+			U = Insert_null(TmpP->Element, U);
+			TmpP = TmpP->Next;
+		}
+
+	}
+	if (TmpP == NULL)
+	{
+		while (TmpT != NULL)
+		{
+			U = Insert_null(TmpT->Element, U);
+			TmpT = TmpT->Next;
+		}
+
+	}
+	return U;
+}
+void printSet(List L)
+{
+	Position P;
+	P = L->Next;
+	printf("{");
+	while (P->Next != NULL)
+	{
+		printf("%d, ", P->Element);
+		P = P->Next;
+	}
+	printf("%d", P->Element);
+	printf("}");
+}
 int main()
 {
 	time_t begin, finish;
@@ -100,6 +204,25 @@ int main()
 	PrintLots(L, P);
 	finish = clock();
 	total_time = (double)(finish - begin) / CLOCKS_PER_SEC;
-	printf("运行时间是：%0.3fms", total_time);
+	printf("运行时间是：%0.3fms\n", total_time);
+	int c[10] = { 1,3,4,5,8,12,14,19,21,25 };
+	int d[9] = { 0,4,6,9,12,13,17,19,21 };
+	List L1 = NULL;
+	List P1 = NULL;
+	List U = NULL;
+	List S = NULL;
+	L1 = Initialize(L1);
+	P1 = Initialize(P1);
+	L1 = Insert(c, 10, L1);
+	P1 = Insert(d, 9, P1);
+	U = Initialize(U);
+	S = Initialize(S);
+	S = intersection(L1, P1, S);
+	U = unionset(L1, P1, U);
+	printf("两表并集：");
+	printSet(U);
+	printf("\n");
+	printf("两表交集：");
+	printSet(S);
 	return 0;
 }
