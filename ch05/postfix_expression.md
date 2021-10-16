@@ -8,4 +8,5 @@
 因此还有许多地方需要优化    
 时间复杂度O（N）
 ##### 运行结果：
-![Uploading image.png…]()
+![image](https://user-images.githubusercontent.com/91459872/137581753-8d82623c-2f12-4a94-b124-d9988bb5edb2.png)
+
