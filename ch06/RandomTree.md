@@ -3,3 +3,4 @@
 我想的方法时间复杂度很高，这里的方法是利用递归的一种很简便的方法  
 递归结束的标志是生成随机数的Lower>Upper  
 ##### 运行结果：  
+![image](https://user-images.githubusercontent.com/91459872/137585691-5778f056-d162-4148-ad3f-c85284a1a436.png)
